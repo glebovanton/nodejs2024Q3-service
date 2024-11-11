@@ -11,6 +11,7 @@ import {
   ParseUUIDPipe,
   UsePipes,
   ValidationPipe,
+  HttpStatus,
 } from '@nestjs/common';
 import { ArtistService } from 'src/artist/artist.service';
 import { Artist } from './entities/artist.entity';
@@ -51,7 +52,7 @@ export class ArtistController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', ParseUUIDPipe) id: string): void {
     this.artistService.delete(id);
   }

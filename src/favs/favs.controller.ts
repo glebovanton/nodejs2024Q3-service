@@ -7,6 +7,7 @@ import {
   Param,
   HttpCode,
   ParseUUIDPipe,
+  HttpStatus,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { capitalizeFirstLetter } from 'src/helpers';
@@ -38,7 +39,7 @@ export class FavsController {
   }
 
   @Delete(':entity/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   delete(
     @Param('entity') entity: string,
     @Param('id', ParseUUIDPipe) id: string,

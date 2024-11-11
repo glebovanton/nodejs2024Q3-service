@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  HttpStatus,
   Delete,
   Get,
   Header,
@@ -56,7 +57,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', ParseUUIDPipe) id: string): void {
     this.userService.delete(id);
   }
