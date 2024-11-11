@@ -8,4 +8,4 @@ export type Fav = {
   tracks: Track[];
 };
 
-export type Entity = 'track' | 'album' | 'artist';
+export type FavEntity = 'track' | 'album' | 'artist';
