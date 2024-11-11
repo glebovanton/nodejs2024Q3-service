@@ -8,6 +8,7 @@ import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { notFoundExceptionMessage } from '@/helpers';
 
 @Injectable()
 export class UserService {
@@ -64,7 +65,7 @@ export class UserService {
     );
 
     if (!user) {
-      throw new NotFoundException('User with this ID not found');
+      throw new NotFoundException(notFoundExceptionMessage(User));
     }
 
     return user;

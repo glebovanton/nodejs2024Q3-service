@@ -4,6 +4,7 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
 import { DatabaseService } from 'src/database/database.service';
+import { notFoundExceptionMessage } from '@/helpers';
 
 @Injectable()
 export class ArtistService {
@@ -64,7 +65,7 @@ export class ArtistService {
     );
 
     if (!artist) {
-      throw new NotFoundException('Artist with this ID not found');
+      throw new NotFoundException(notFoundExceptionMessage(Artist));
     }
 
     return artist;

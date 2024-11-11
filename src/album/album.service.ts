@@ -5,6 +5,7 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { Track } from 'src/track/entities/track.entity';
+import { notFoundExceptionMessage } from '@/helpers';
 
 @Injectable()
 export class AlbumService {
@@ -61,7 +62,7 @@ export class AlbumService {
     );
 
     if (!album) {
-      throw new NotFoundException('Album with this ID not found');
+      throw new NotFoundException(notFoundExceptionMessage(Album));
     }
 
     return album;

@@ -7,7 +7,7 @@ import { DatabaseService } from 'src/database/database.service';
 import { Artist } from 'src/artist/entities/artist.entity';
 import { Album } from 'src/album/entities/album.entity';
 import { Track } from 'src/track/entities/track.entity';
-import { capitalizeFirstLetter } from 'src/helpers';
+import { notFoundExceptionMessage } from 'src/helpers';
 import { Fav, FavEntity } from 'src/favs/entities/fav.entity';
 
 @Injectable()
@@ -34,9 +34,7 @@ export class FavsService {
       this.findEntityInFavs(entityName, id);
 
     if (!entityInFavs) {
-      throw new NotFoundException(
-        `${capitalizeFirstLetter(entityName)} with this ID not found`,
-      );
+      throw new NotFoundException(notFoundExceptionMessage(entityName));
     }
 
     const entityIndex: number =
@@ -55,7 +53,7 @@ export class FavsService {
 
     if (!entity) {
       throw new UnprocessableEntityException(
-        `${capitalizeFirstLetter(entityName)} with this ID doesn't exist`,
+        notFoundExceptionMessage(entityName),
       );
     }
 

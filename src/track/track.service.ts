@@ -4,6 +4,7 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
 import { DatabaseService } from 'src/database/database.service';
+import { notFoundExceptionMessage } from '@/helpers';
 
 @Injectable()
 export class TrackService {
@@ -56,7 +57,7 @@ export class TrackService {
     );
 
     if (!track) {
-      throw new NotFoundException('Track with this ID not found');
+      throw new NotFoundException(notFoundExceptionMessage(Track));
     }
 
     return track;
