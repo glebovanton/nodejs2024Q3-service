@@ -60,7 +60,7 @@ export class UserService {
 
   private findUser(id: string): User {
     const user: User | undefined = this.dbService.users.find(
-      (user) => user.id === id,
+      (user: User): boolean => user.id === id,
     );
 
     if (!user) {
