@@ -49,7 +49,8 @@ export class AlbumService {
     );
 
     if (albumInFavorites) {
-      const albumIndex: number = this.dbService.favs.albums.indexOf(albumInFavorites);
+      const albumIndex: number =
+        this.dbService.favs.albums.indexOf(albumInFavorites);
       this.dbService.favs.albums.splice(albumIndex, 1);
     }
   }
