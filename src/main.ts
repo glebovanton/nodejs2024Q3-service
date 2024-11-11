@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import * as yaml from 'js-yaml';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
@@ -17,7 +18,7 @@ async function bootstrap() {
   ) as OpenAPIObject;
 
   SwaggerModule.setup(swaggerPath, app, swaggerDoc);
-
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(4000);
   console.log(
     `Swagger ${process.pid} works on the http://${host}:${port}/${swaggerPath}/`,
