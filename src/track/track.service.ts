@@ -53,7 +53,7 @@ export class TrackService {
 
   private findTrack(id: string): Track {
     const track: Track | undefined = this.dbService.tracks.find(
-      (track) => track.id === id,
+      (track: Track): boolean => track.id === id,
     );
 
     if (!track) {

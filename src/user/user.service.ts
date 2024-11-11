@@ -37,7 +37,7 @@ export class UserService {
   }
 
   public update(id: string, dto: UpdatePasswordDto): User {
-    const { oldPassword, newPassword } = dto;
+    const { oldPassword, newPassword }: UpdatePasswordDto = dto;
     const user: User = this.findUser(id);
     const { password } = user;
 
