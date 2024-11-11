@@ -12,10 +12,10 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ArtistService } from 'src/artist/artist.service';
 import { Artist } from './entities/artist.entity';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { ArtistService } from '@/artist/artist.service';
 
 @Controller('artist')
 export class ArtistController {
