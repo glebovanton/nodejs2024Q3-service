@@ -4,3 +4,7 @@ export type Album = {
   year: number;
   artistId: string | null;
 };
+
+export class CreateAlbumDto {}
+
+export class UpdateAlbumDto {}
