@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 const { HOST = 'localhost', PORT = '4000' } = process.env;
