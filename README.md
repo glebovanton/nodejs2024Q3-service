@@ -1,5 +1,30 @@
 # Home Library Service
 
+## To check this task you need:
+
+1. Rename .env.example to .env
+2. Run `npm install`
+3. Run `npm start`
+4. Check detailed instructions in `README.md`. +10
+5. Check Users, Tracks, Albums, Artists, Favorites modules and their endpoints. +50
+6. Check well passed tests. Run `npm run test`. +10
+7. Check PORT value is stored into `.env` file. +10
+8. Open http://localhost:4000/doc/ in your browser to see OpenAPI documentation +20
+9. Check for forfeits:
+   -670 Changes in tests
+   -30% of max task score Commits after deadline (except commits that affect only Readme.md, .gitignore, etc.)
+   -20 No separate development branch
+   -20 No Pull Request
+   -10 Pull Request description is incorrect
+   -10 Every lint error after npm run lint using local config (errors, not warnings)
+   -20 Less than 3 commits in the development branch, not including commits that make changes only to Readme.md or similar files (tsconfig.json, .gitignore, .prettierrc.json, etc.)
+
+## Installation
+
+```
+npm install
+```
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
