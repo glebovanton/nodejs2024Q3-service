@@ -20,7 +20,7 @@ export class FavsController {
   constructor(private readonly favsService: FavsService) {}
 
   @Get()
-  findAll(): Fav {
+  findAll(): Promise<Fav> {
     return this.favsService.findAll();
   }
 
@@ -28,7 +28,7 @@ export class FavsController {
   add(
     @Param('entity') entity: string,
     @Param('id', ParseUUIDPipe) id: string,
-  ): string {
+  ): Promise<string> {
     if (this.entities.includes(entity)) {
       this.favsService.add(this.convertToPlural(entity), id);
 
@@ -43,7 +43,7 @@ export class FavsController {
   delete(
     @Param('entity') entity: string,
     @Param('id', ParseUUIDPipe) id: string,
-  ): string {
+  ): Promise<string> {
     if (this.entities.includes(entity)) {
       this.favsService.delete(this.convertToPlural(entity), id);
 

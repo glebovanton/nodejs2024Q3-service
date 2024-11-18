@@ -25,14 +25,14 @@ export class UserController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  findAll(): User[] {
+  findAll(): Promise<User[]> {
     const users: User[] = this.userService.findAll();
     return users.map((user) => plainToClass(User, user));
   }
 
   @Get(':id')
   @Header('Content-Type', 'application/json')
-  findOne(@Param('id', ParseUUIDPipe) id: string): User {
+  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
     const user: User = this.userService.findOne(id);
     return plainToClass(User, user);
   }
@@ -40,7 +40,7 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @Post()
   @Header('Content-Type', 'application/json')
-  create(@Body() dto: CreateUserDto): User {
+  create(@Body() dto: CreateUserDto): Promise<User> {
     const user: User = this.userService.create(dto);
     return plainToClass(User, user);
   }
@@ -51,14 +51,14 @@ export class UserController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdatePasswordDto,
-  ): User {
+  ): Promise<User> {
     const user: User = this.userService.update(id, dto);
     return plainToClass(User, user);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseUUIDPipe) id: string): void {
+  delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     this.userService.delete(id);
   }
 }

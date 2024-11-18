@@ -24,20 +24,20 @@ export class ArtistController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  findAll(): Artist[] {
+  findAll(): Promise<Artist[]> {
     return this.artistService.findAll();
   }
 
   @Get(':id')
   @Header('Content-Type', 'application/json')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Artist {
+  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Artist> {
     return this.artistService.findOne(id);
   }
 
   @UsePipes(new ValidationPipe())
   @Post()
   @Header('Content-Type', 'application/json')
-  create(@Body() dto: CreateArtistDto): Artist {
+  create(@Body() dto: CreateArtistDto): Promise<Artist> {
     return this.artistService.create(dto);
   }
 
@@ -47,13 +47,13 @@ export class ArtistController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateArtistDto,
-  ): Artist {
+  ): Promise<Artist> {
     return this.artistService.update(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseUUIDPipe) id: string): void {
+  delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     this.artistService.delete(id);
   }
 }

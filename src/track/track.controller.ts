@@ -24,20 +24,20 @@ export class TrackController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  findAll(): Track[] {
+  findAll(): Promise<Track[]> {
     return this.trackService.findAll();
   }
 
   @Get(':id')
   @Header('Content-Type', 'application/json')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Track {
+  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Track> {
     return this.trackService.findOne(id);
   }
 
   @UsePipes(new ValidationPipe())
   @Post()
   @Header('Content-Type', 'application/json')
-  create(@Body() dto: CreateTrackDto): Track {
+  create(@Body() dto: CreateTrackDto): Promise<Track> {
     return this.trackService.create(dto);
   }
 
@@ -47,13 +47,13 @@ export class TrackController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateTrackDto,
-  ): Track {
+  ): Promise<Track> {
     return this.trackService.update(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseUUIDPipe) id: string): void {
+  delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     this.trackService.delete(id);
   }
 }
