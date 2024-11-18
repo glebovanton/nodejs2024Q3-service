@@ -24,20 +24,20 @@ export class AlbumController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  findAll(): Album[] {
+  findAll(): Promise<Album[]> {
     return this.albumService.findAll();
   }
 
   @Get(':id')
   @Header('Content-Type', 'application/json')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Album {
+  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Album> {
     return this.albumService.findOne(id);
   }
 
   @UsePipes(new ValidationPipe())
   @Post()
   @Header('Content-Type', 'application/json')
-  create(@Body() dto: CreateAlbumDto): Album {
+  create(@Body() dto: CreateAlbumDto): Promise<Album> {
     return this.albumService.create(dto);
   }
 
@@ -47,13 +47,13 @@ export class AlbumController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateAlbumDto,
-  ): Album {
+  ): Promise<Album> {
     return this.albumService.update(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseUUIDPipe) id: string): void {
+  delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     this.albumService.delete(id);
   }
 }

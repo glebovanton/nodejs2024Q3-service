@@ -3,63 +3,59 @@ import { v4 as uuidv4 } from 'uuid';
 import { Album } from './entities/album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { DatabaseService } from 'src/database/database.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { Track } from 'src/track/entities/track.entity';
 import { notFoundExceptionMessage } from '@/helpers';
 
 @Injectable()
 export class AlbumService {
-  constructor(private dbService: DatabaseService) {}
+  constructor(private prisma: PrismaService) {}
 
-  public findAll(): Album[] {
-    return this.dbService.albums;
+  public async findAll(): Promise<Album[]> {
+    return await this.prisma.album.findMany();
   }
 
-  public findOne(id: string): Album {
+  public async findOne(id: string): Promise<Album> {
     return this.findAlbum(id);
   }
 
-  public create(dto: CreateAlbumDto): Album {
+  public async create(dto: CreateAlbumDto): Promise<Album> {
     const album: Album = {
       id: uuidv4(),
       ...dto,
     };
 
-    this.dbService.albums.push(album);
-
-    return album;
+    return await this.prisma.album.create({
+      data: album,
+    });
   }
 
-  public update(id: string, dto: UpdateAlbumDto): Album {
-    const track: Album = this.findAlbum(id);
+  public async update(id: string, dto: UpdateAlbumDto): Promise<Album> {
+    await this.findAlbum(id);
 
-    return Object.assign(track, dto);
+    const { artistId, ...rest } = dto;
+
+    return await this.prisma.album.update({
+      where: { id },
+      data: {
+        ...rest,
+        artistId: artistId || null,
+      },
+    });
   }
 
-  public delete(id: string): void {
-    const album: Album = this.findAlbum(id);
-    const albumIndex: number = this.dbService.albums.indexOf(album);
-
-    this.dbService.albums.splice(albumIndex, 1);
-    this.dbService.tracks
-      .filter((track: Track): boolean => track.albumId === album.id)
-      .forEach((track: Track): null => (track.albumId = null));
-
-    const albumInFavorites: Album | undefined = this.dbService.favs.albums.find(
-      (album: Album): boolean => album.id === id,
-    );
-
-    if (albumInFavorites) {
-      const albumIndex: number =
-        this.dbService.favs.albums.indexOf(albumInFavorites);
-      this.dbService.favs.albums.splice(albumIndex, 1);
-    }
+  public async delete(id: string): Promise<void> {
+    await this.findAlbum(id);
+    await this.prisma.album.delete({
+      where: { id },
+    });
   }
 
-  private findAlbum(id: string): Album {
-    const album: Album | undefined = this.dbService.albums.find(
-      (album: Album): boolean => album.id === id,
-    );
+  private async findAlbum(id: string): Promise<Album> {
+    const album: Promise<Album | undefined> =
+      await this.prisma.album.findUnique({
+        where: { id },
+      });
 
     if (!album) {
       throw new NotFoundException(notFoundExceptionMessage(Album));
