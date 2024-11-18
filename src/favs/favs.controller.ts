@@ -28,7 +28,7 @@ export class FavsController {
   add(
     @Param('entity') entity: string,
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<string> {
+  ): string {
     if (this.entities.includes(entity)) {
       this.favsService.add(this.convertToPlural(entity), id);
 

@@ -1,9 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { Artist } from 'src/artist/entities/artist.entity';
 import { Album } from 'src/album/entities/album.entity';
 import { Track } from 'src/track/entities/track.entity';
@@ -12,44 +8,72 @@ import { Fav, FavEntity } from 'src/favs/entities/fav.entity';
 
 @Injectable()
 export class FavsService {
-  constructor(private dbService: DatabaseService) {}
+  constructor(private prisma: PrismaService) {}
 
-  public findAll(): Fav {
-    return this.dbService.favs;
+  public async findAll(): Promise<Fav> {
+    await this.getFavorites();
+
+    return await this.prisma.favorites.findFirst({
+      select: {
+        artists: {
+          select: {
+            id: true,
+            name: true,
+            grammy: true,
+          },
+        },
+        albums: {
+          select: {
+            id: true,
+            name: true,
+            year: true,
+            artistId: true,
+          },
+        },
+        tracks: {
+          select: {
+            id: true,
+            name: true,
+            duration: true,
+            artistId: true,
+            albumId: true,
+          },
+        },
+      },
+    });
   }
 
-  public add(entityName: FavEntity, id: string): void {
-    const entity: Artist | Album | Track = this.findEntity(entityName, id);
+  public async add(entityName: FavEntity, id: string): Promise<void> {
+    await this.findEntity(entityName, id);
 
-    const entityInFavs: Artist | Album | Track | undefined =
-      this.findEntityInFavs(entityName, id);
+    const favorites = await this.getFavorites();
 
-    if (!entityInFavs) {
-      this.dbService.favs[entityName].push(entity);
-    }
+    await this.prisma.favorites.update({
+      where: { id: favorites.id },
+      data: { [`${entityName}s`]: { connect: { id } } },
+    });
   }
 
-  public delete(entityName: FavEntity, id: string): void {
-    const entityInFavs: Artist | Album | Track | undefined =
-      this.findEntityInFavs(entityName, id);
+  public async delete(entityName: FavEntity, id: string): Promise<void> {
+    await this.findEntity(entityName, id);
 
-    if (!entityInFavs) {
-      throw new NotFoundException(notFoundExceptionMessage(entityName));
-    }
+    const favorites = await this.getFavorites();
 
-    const entityIndex: number =
-      this.dbService.favs[entityName].indexOf(entityInFavs);
-
-    this.dbService.favs[entityName].splice(entityIndex, 1);
+    await this.prisma.favorites.update({
+      where: { id: favorites.id },
+      data: { [`${entityName}s`]: { disconnect: { id } } },
+    });
   }
 
-  private findEntity(
+  private async findEntity(
     entityName: FavEntity,
     id: string,
-  ): Artist | Album | Track {
-    const entity: Artist | Album | Track | undefined = this.dbService[
+  ): Promise<Artist | Album | Track> {
+    const entity: Artist | Album | Track | undefined = await this.prisma[
       entityName
-    ].find((entity: Artist | Album | Track): boolean => entity.id === id);
+    ].findUnique({
+      where: { id },
+    });
 
     if (!entity) {
       throw new UnprocessableEntityException(
@@ -60,12 +84,13 @@ export class FavsService {
     return entity;
   }
 
-  private findEntityInFavs(
-    entityName: FavEntity,
-    id: string,
-  ): Artist | Album | Track | undefined {
-    return this.dbService.favs[entityName].find(
-      (entity: Artist | Album | Track): boolean => entity.id === id,
-    );
+  private async getFavorites(): Promise<Artist | Album | Track | undefined> {
+    const favorites = await this.prisma.favorites.findFirst();
+
+    if (!favorites) {
+      return await this.prisma.favorites.create({ data: {} });
+    }
+
+    return favorites;
   }
 }
