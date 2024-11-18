@@ -25,40 +25,40 @@ export class UserController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  findAll(): Promise<User[]> {
-    const users: User[] = this.userService.findAll();
+  async findAll(): Promise<User[]> {
+    const users: User[] = await this.userService.findAll();
     return users.map((user) => plainToClass(User, user));
   }
 
   @Get(':id')
   @Header('Content-Type', 'application/json')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user: User = this.userService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+    const user: User = await this.userService.findOne(id);
     return plainToClass(User, user);
   }
 
   @UsePipes(new ValidationPipe())
   @Post()
   @Header('Content-Type', 'application/json')
-  create(@Body() dto: CreateUserDto): Promise<User> {
-    const user: User = this.userService.create(dto);
+  async create(@Body() dto: CreateUserDto): Promise<User> {
+    const user: User = await this.userService.create(dto);
     return plainToClass(User, user);
   }
 
   @UsePipes(new ValidationPipe())
   @Put(':id')
   @Header('Content-Type', 'application/json')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdatePasswordDto,
   ): Promise<User> {
-    const user: User = this.userService.update(id, dto);
+    const user: User = await this.userService.update(id, dto);
     return plainToClass(User, user);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
-    this.userService.delete(id);
+    return this.userService.delete(id);
   }
 }

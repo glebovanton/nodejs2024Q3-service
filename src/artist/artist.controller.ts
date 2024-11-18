@@ -54,6 +54,6 @@ export class ArtistController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
-    this.artistService.delete(id);
+    return this.artistService.delete(id);
   }
 }

@@ -43,7 +43,7 @@ export class FavsController {
   delete(
     @Param('entity') entity: string,
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<string> {
+  ): string {
     if (this.entities.includes(entity)) {
       this.favsService.delete(this.convertToPlural(entity), id);
 

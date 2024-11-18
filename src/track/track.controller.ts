@@ -54,6 +54,6 @@ export class TrackController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
-    this.trackService.delete(id);
+    return this.trackService.delete(id);
   }
 }

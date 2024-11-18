@@ -114,8 +114,8 @@ export class UserService {
   private refreshUser(user: User): User {
     return {
       ...user,
-      createdAt: user.createdAt.getTime(),
-      updatedAt: user.updatedAt.getTime(),
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
     };
   }
 
