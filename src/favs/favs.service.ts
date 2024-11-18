@@ -13,7 +13,7 @@ export class FavsService {
   public async findAll(): Promise<Fav> {
     await this.getFavorites();
 
-    return await this.prisma.favorites.findFirst({
+    return this.prisma.favorites.findFirst({
       select: {
         artists: {
           select: {
@@ -69,9 +69,9 @@ export class FavsService {
     entityName: FavEntity,
     id: string,
   ): Promise<Artist | Album | Track> {
-    const entity: Artist | Album | Track | undefined = await this.prisma[
-      entityName
-    ].findUnique({
+    const entity: Artist | Album | Track | undefined = await (
+      this.prisma as any
+    )[entityName].findUnique({
       where: { id },
     });
 
@@ -84,11 +84,13 @@ export class FavsService {
     return entity;
   }
 
-  private async getFavorites(): Promise<Artist | Album | Track | undefined> {
+  private async getFavorites(): Promise<{ id: string } | undefined> {
     const favorites = await this.prisma.favorites.findFirst();
 
     if (!favorites) {
-      return await this.prisma.favorites.create({ data: {} });
+      await this.prisma.favorites.create({ data: {} });
+
+      return undefined;
     }
 
     return favorites;

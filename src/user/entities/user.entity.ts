@@ -7,8 +7,8 @@ export class User {
   @Exclude()
   password: string;
   version: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | number;
+  updatedAt: Date | number;
 }
 
 export class UpdatePasswordDto {

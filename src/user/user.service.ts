@@ -3,13 +3,11 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { notFoundExceptionMessage } from '@/helpers';
-import { Track } from '@/track/entities/track.entity';
 
 @Injectable()
 export class UserService {
@@ -35,12 +33,12 @@ export class UserService {
     return this.refreshUser(user);
   }
 
-  public async create(dto: CreateUserDto): Promise<User> {
+  public async create(dto: CreateUserDto) {
     const user = await this.prisma.user.create({
       data: {
         version: 1,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
         ...dto,
       },
       select: {
@@ -61,7 +59,7 @@ export class UserService {
 
   public async update(id: string, dto: UpdatePasswordDto): Promise<User> {
     const { oldPassword, newPassword }: UpdatePasswordDto = dto;
-    const user = await this.prisma.user.findUnique({
+    const user: User | null = await this.prisma.user.findUnique({
       where: {
         id,
       },
@@ -89,7 +87,7 @@ export class UserService {
       where: { id },
       data: {
         password: newPassword,
-        version: user.version++,
+        version: user.version + 1,
         updatedAt: new Date(),
       },
       select: {
@@ -111,15 +109,21 @@ export class UserService {
     });
   }
 
-  private refreshUser(user: User): User {
+  private refreshUser(user): User {
     return {
       ...user,
-      createdAt: new Date(user.createdAt),
-      updatedAt: new Date(user.updatedAt),
+      createdAt:
+        user.createdAt instanceof Date
+          ? user.createdAt
+          : new Date(user.createdAt),
+      updatedAt:
+        user.updatedAt instanceof Date
+          ? user.updatedAt
+          : new Date(user.updatedAt),
     };
   }
 
-  private async findUser(id: string): Promise<User> {
+  private async findUser(id: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id,

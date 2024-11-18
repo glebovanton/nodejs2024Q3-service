@@ -4,7 +4,6 @@ import { Album } from './entities/album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Track } from 'src/track/entities/track.entity';
 import { notFoundExceptionMessage } from '@/helpers';
 
 @Injectable()
@@ -52,10 +51,9 @@ export class AlbumService {
   }
 
   private async findAlbum(id: string): Promise<Album> {
-    const album: Promise<Album | undefined> =
-      await this.prisma.album.findUnique({
-        where: { id },
-      });
+    const album: Album | undefined = await this.prisma.album.findUnique({
+      where: { id },
+    });
 
     if (!album) {
       throw new NotFoundException(notFoundExceptionMessage(Album));

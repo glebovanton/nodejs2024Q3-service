@@ -26,14 +26,14 @@ export class UserController {
   @Get()
   @Header('Content-Type', 'application/json')
   async findAll(): Promise<User[]> {
-    const users: User[] = await this.userService.findAll();
+    const users = await this.userService.findAll();
     return users.map((user) => plainToClass(User, user));
   }
 
   @Get(':id')
   @Header('Content-Type', 'application/json')
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user: User = await this.userService.findOne(id);
+    const user = await this.userService.findOne(id);
     return plainToClass(User, user);
   }
 
@@ -41,7 +41,7 @@ export class UserController {
   @Post()
   @Header('Content-Type', 'application/json')
   async create(@Body() dto: CreateUserDto): Promise<User> {
-    const user: User = await this.userService.create(dto);
+    const user = await this.userService.create(dto);
     return plainToClass(User, user);
   }
 
@@ -52,7 +52,7 @@ export class UserController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdatePasswordDto,
   ): Promise<User> {
-    const user: User = await this.userService.update(id, dto);
+    const user = await this.userService.update(id, dto);
     return plainToClass(User, user);
   }
 

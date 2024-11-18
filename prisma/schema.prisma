@@ -24,7 +24,7 @@ model User {
 
 model Artist {
   id        String      @id @default(uuid())
-  name      String
+  name      String      @unique
   grammy    Boolean
   albums    Album[]
   tracks    Track[]
@@ -53,7 +53,7 @@ model Track {
 }
 
 model Favorites {
-  id      String   @id @default("1")
+  id      String   @id @default(uuid())
   artists Artist[]
   albums  Album[]
   tracks  Track[]
