@@ -10,7 +10,7 @@ export class ArtistService {
   constructor(private prisma: PrismaService) {}
 
   public async findAll(): Promise<Artist[]> {
-    return await this.prisma.artist.findMany();
+    return this.prisma.artist.findMany();
   }
 
   public async findOne(id: string): Promise<Artist> {
@@ -18,7 +18,7 @@ export class ArtistService {
   }
 
   public async create(dto: CreateArtistDto): Promise<Artist> {
-    return await this.prisma.artist.create({
+    return this.prisma.artist.create({
       data: dto,
     });
   }
@@ -26,7 +26,7 @@ export class ArtistService {
   public async update(id: string, dto: UpdateArtistDto): Promise<Artist> {
     await this.findArtist(id);
 
-    return await this.prisma.artist.update({
+    return this.prisma.artist.update({
       where: { id },
       data: dto,
     });

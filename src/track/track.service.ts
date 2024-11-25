@@ -10,7 +10,7 @@ export class TrackService {
   constructor(private prisma: PrismaService) {}
 
   public async findAll(): Promise<Track[]> {
-    return await this.prisma.track.findMany();
+    return this.prisma.track.findMany();
   }
 
   public async findOne(id: string): Promise<Track> {
@@ -20,7 +20,7 @@ export class TrackService {
   public async create(dto: CreateTrackDto): Promise<Track> {
     const { artistId, albumId, ...rest } = dto;
 
-    return await this.prisma.track.create({
+    return this.prisma.track.create({
       data: {
         ...rest,
         artistId: artistId || null,
@@ -34,7 +34,7 @@ export class TrackService {
 
     const { artistId, albumId, ...rest } = dto;
 
-    return await this.prisma.track.update({
+    return this.prisma.track.update({
       where: { id },
       data: {
         ...rest,

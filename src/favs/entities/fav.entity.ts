@@ -15,3 +15,9 @@ export enum FavType {
   album = 'album',
   track = 'track',
 }
+
+export const entityMap = {
+  [`${FavType.artist}s`]: FavType.artist,
+  [`${FavType.album}s`]: FavType.album,
+  [`${FavType.track}s`]: FavType.track,
+};

@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
 import { Album } from './entities/album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -11,20 +10,21 @@ export class AlbumService {
   constructor(private prisma: PrismaService) {}
 
   public async findAll(): Promise<Album[]> {
-    return await this.prisma.album.findMany();
+    return this.prisma.album.findMany();
   }
 
   public async findOne(id: string): Promise<Album> {
     return this.findAlbum(id);
   }
 
-  public async create(dto: CreateAlbumDto): Promise<Album> {
-    const album: Album = {
-      id: uuidv4(),
-      ...dto,
-    };
+  public async create({
+    name,
+    year,
+    artistId,
+  }: CreateAlbumDto): Promise<Album> {
+    const album = new Album(name, year, artistId);
 
-    return await this.prisma.album.create({
+    return this.prisma.album.create({
       data: album,
     });
   }
@@ -32,15 +32,7 @@ export class AlbumService {
   public async update(id: string, dto: UpdateAlbumDto): Promise<Album> {
     await this.findAlbum(id);
 
-    const { artistId, ...rest } = dto;
-
-    return await this.prisma.album.update({
-      where: { id },
-      data: {
-        ...rest,
-        artistId: artistId || null,
-      },
-    });
+    return this.prisma.album.update({ where: { id }, data: dto });
   }
 
   public async delete(id: string): Promise<void> {

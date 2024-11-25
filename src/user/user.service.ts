@@ -114,12 +114,12 @@ export class UserService {
       ...user,
       createdAt:
         user.createdAt instanceof Date
-          ? user.createdAt
-          : new Date(user.createdAt),
+          ? user.createdAt.getTime()
+          : new Date(user.createdAt).getTime(),
       updatedAt:
         user.updatedAt instanceof Date
-          ? user.updatedAt
-          : new Date(user.updatedAt),
+          ? user.updatedAt.getTime()
+          : new Date(user.updatedAt).getTime(),
     };
   }
 
