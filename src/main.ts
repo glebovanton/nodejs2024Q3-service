@@ -19,7 +19,7 @@ async function bootstrap() {
 
   SwaggerModule.setup(swaggerPath, app, swaggerDoc);
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(4000);
+  await app.listen(port);
   console.log(
     `Swagger ${process.pid} works on the http://${host}:${port}/${swaggerPath}/`,
   );

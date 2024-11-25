@@ -6,11 +6,18 @@
 2. Run `npm install`
 3. Run `npm start`
 4. Check detailed instructions in `README.md`. +10
-5. Check Users, Tracks, Albums, Artists, Favorites modules and their endpoints. +50
-6. Check well passed tests. Run `npm run test`. +10
-7. Check PORT value is stored into `.env` file. +10
-8. Open http://localhost:4000/doc/ in your browser to see OpenAPI documentation +20
-9. Check for forfeits:
+5. Run Docker-compose `docker compose up --build`
+6. Check for vulnerabilities
+```
+npm run docker-audit:api
+npm run docker-audit:db
+```
+7. Docker check for vulnerabilities.
+8. Check Users, Tracks, Albums, Artists, Favorites modules and their endpoints. +50
+9. Check well passed tests. Run `npm run test`. +10
+10. Check PORT value is stored into `.env` file. +10
+11. Open http://localhost:4000/doc/ in your browser to see OpenAPI documentation +20
+12. Check for forfeits:
    -670 Changes in tests
    -30% of max task score Commits after deadline (except commits that affect only Readme.md, .gitignore, etc.)
    -20 No separate development branch
