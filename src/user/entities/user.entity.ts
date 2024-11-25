@@ -6,6 +6,7 @@ export class User {
 
   @Exclude()
   password: string;
+  token: string;
   version: number;
   createdAt: Date | number;
   updatedAt: Date | number;
@@ -23,4 +24,5 @@ export class UpdateUserDto {
   login: string;
   @Exclude()
   password: string;
+  version: number;
 }

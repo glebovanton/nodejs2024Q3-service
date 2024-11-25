@@ -6,7 +6,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { UpdateUserDto, User } from './entities/user.entity';
 import { notFoundExceptionMessage } from '@/helpers';
 
 @Injectable()
@@ -29,6 +29,25 @@ export class UserService {
 
   public async findOne(id: string): Promise<User> {
     const user = await this.findUser(id);
+
+    return this.refreshUser(user);
+  }
+
+  public async findOneByLogin(login: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { login },
+      select: {
+        id: true,
+        login: true,
+        version: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(notFoundExceptionMessage(User));
+    }
 
     return this.refreshUser(user);
   }
@@ -59,7 +78,7 @@ export class UserService {
 
   public async update(id: string, dto: UpdatePasswordDto): Promise<User> {
     const { oldPassword, newPassword }: UpdatePasswordDto = dto;
-    const user: User | null = await this.prisma.user.findUnique({
+    const user: UpdateUserDto | null = await this.prisma.user.findUnique({
       where: {
         id,
       },
