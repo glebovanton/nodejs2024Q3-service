@@ -45,28 +45,29 @@ export class AuthService {
 
   public async refreshToken(token: string) {
     try {
-      await this.jwtService.verify(token, {
+      const payload = this.jwtService.verify<JwtPayload>(token.trim(), {
         secret: process.env.JWT_SECRET_REFRESH_KEY,
       });
-    } catch {
+      const { exp, iat, ...cleanPayload } = payload;
+      const tokens = this.getTokens(cleanPayload);
+
+      return { ...cleanPayload, ...tokens };
+    } catch (error) {
+      console.error('!JWT Verification Error:', error.message);
       throw new ForbiddenException('Refresh token is not valid');
     }
-
-    const payload = decode(token) as JwtPayload;
-
-    const tokens = this.getTokens(payload);
-
-    return { ...payload, ...tokens };
   }
 
   private getTokens(payload: JwtPayload) {
-    const accessToken = this.jwtService.sign(payload, {
-      expiresIn: process.env.TOKEN_EXPIRE_TIME,
+    const { exp, iat, ...cleanPayload } = payload;
+
+    const accessToken = this.jwtService.sign(cleanPayload, {
+      expiresIn: process.env.TOKEN_EXPIRE_TIME || '1h',
       secret: process.env.JWT_SECRET_KEY,
     });
 
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
+    const refreshToken = this.jwtService.sign(cleanPayload, {
+      expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME || '24h',
       secret: process.env.JWT_SECRET_REFRESH_KEY,
     });
 

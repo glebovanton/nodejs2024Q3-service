@@ -42,6 +42,7 @@ export class UserService {
         version: true,
         createdAt: true,
         updatedAt: true,
+        password: true,
       },
     });
 

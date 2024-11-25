@@ -24,16 +24,20 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+    const { method, url, headers } = context.switchToHttp().getRequest();
 
     if (isPublic) {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    if (method === 'POST' && url === '/auth/refresh') {
+      return true;
+    }
+
+    const token = this.extractTokenFromHeader(headers);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Missing token');
     }
 
     try {
@@ -53,9 +57,14 @@ export class AuthGuard implements CanActivate {
         );
       }
     } catch (error) {
-      if (error instanceof UnauthorizedException) {
-        throw error;
+      if (error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Token has expired');
       }
+
+      if (error.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Invalid token');
+      }
+
       console.error('Unexpected error in AuthGuard:', error);
       throw new UnauthorizedException('Authentication failed');
     }
@@ -63,8 +72,14 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request) {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  private extractTokenFromHeader(headers: Request['headers']) {
+    const authHeader = headers['authorization'];
+
+    if (!authHeader) {
+      throw new UnauthorizedException('Authorization header is missing');
+    }
+
+    const [type, token] = authHeader?.split(' ') ?? [];
 
     return type === 'Bearer' ? token : undefined;
   }

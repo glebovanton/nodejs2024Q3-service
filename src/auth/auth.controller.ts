@@ -4,6 +4,9 @@ import {
   Post,
   UsePipes,
   ValidationPipe,
+  UnauthorizedException,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { LoginDto, RefreshTokenDto, SignUpDto } from './dto';
 import { Public } from './public.decorator';
@@ -24,12 +27,16 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('login')
   async login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+    return await this.authService.login(dto);
   }
 
   @UsePipes(new ValidationPipe())
+  @HttpCode(HttpStatus.OK)
   @Post('refresh')
-  async refresh(@Body() { refreshToken }: RefreshTokenDto) {
-    return await this.authService.refreshToken(refreshToken);
+  async refresh(@Body() body: { refreshToken: string }) {
+    if (!body.refreshToken) {
+      throw new UnauthorizedException('Refresh token is missing');
+    }
+    return await this.authService.refreshToken(body.refreshToken);
   }
 }
