@@ -9,6 +9,7 @@ import { AlbumModule } from './album/album.module';
 import { FavsModule } from './favs/favs.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { HttpExceptionFilter } from '@/filter/exception.filter';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { HttpExceptionFilter } from '@/filter/exception.filter';
     AlbumModule,
     FavsModule,
     PrismaModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [
