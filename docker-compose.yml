@@ -19,6 +19,7 @@ services:
     ports:
       - ${PORT}:${PORT}
     volumes:
+      - ./prisma:/usr/src/app/prisma
       - node_modules:/usr/src/app/node_modules
       - ./src:/usr/src/app/src
   postgres:
