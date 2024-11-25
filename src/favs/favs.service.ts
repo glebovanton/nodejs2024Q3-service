@@ -1,10 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Artist } from 'src/artist/entities/artist.entity';
-import { Album } from 'src/album/entities/album.entity';
-import { Track } from 'src/track/entities/track.entity';
 import { notFoundExceptionMessage } from 'src/helpers';
-import { entityMap, Fav, FavEntity } from 'src/favs/entities/fav.entity';
 
 @Injectable()
 export class FavsService {

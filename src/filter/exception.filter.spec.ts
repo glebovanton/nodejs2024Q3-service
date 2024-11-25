@@ -22,7 +22,9 @@ describe('ExceptionFilter', () => {
   it('should log and format the response correctly', () => {
     const filter = new HttpExceptionFilter(httpAdapterHostMock);
 
-    const mockLoggerError = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+    const mockLoggerError = jest
+      .spyOn(Logger.prototype, 'error')
+      .mockImplementation();
     const mockArgumentsHost = {
       switchToHttp: jest.fn().mockReturnValue({
         getRequest: jest.fn().mockReturnValue({ method: 'GET' }),

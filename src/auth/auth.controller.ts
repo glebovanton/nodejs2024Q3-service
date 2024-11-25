@@ -8,7 +8,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { LoginDto, RefreshTokenDto, SignUpDto } from './dto';
+import { LoginDto, SignUpDto } from './dto';
 import { Public } from './public.decorator';
 import { AuthService } from './auth.service';
 

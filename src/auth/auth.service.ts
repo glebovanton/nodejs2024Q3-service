@@ -4,7 +4,6 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { decode } from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { LoginDto, SignUpDto } from './dto';
 import { JwtPayload } from './types';
